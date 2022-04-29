@@ -9,8 +9,7 @@ app.use(cors())
 app.use(express.json())
 
 const { MongoClient, ServerApiVersion } = require('mongodb')
-const uri =
-    'mongodb+srv://warehouse-manager:kSKGs4onMoQQfLit@cluster0.jvufd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.jvufd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
