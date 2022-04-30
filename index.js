@@ -19,13 +19,20 @@ async function run() {
     try {
         await client.connect()
         const productsCollection = client.db('data').collection('product')
-        //all
+        //all products
         //https://agile-journey-07748.herokuapp.com/products
         app.get('/products', async (req, res) => {
             const query = {}
             const cursor = productsCollection.find(query)
             const result = await cursor.toArray(cursor)
-            console.log('from mongodb ')
+            res.send(result)
+        })
+
+        //four products
+        app.get('/fourProducts', async (req, res) => {
+            const query = {}
+            const cursor = productsCollection.find(query)
+            const result = await cursor.limit(4).toArray(cursor)
             res.send(result)
         })
     } finally {
