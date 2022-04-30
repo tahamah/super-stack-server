@@ -18,10 +18,12 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect()
-        const bookCollection = client.db('data').collection('product')
+        const productsCollection = client.db('data').collection('product')
+        //all
+        //https://agile-journey-07748.herokuapp.com/products
         app.get('/products', async (req, res) => {
             const query = {}
-            const cursor = bookCollection.find(query)
+            const cursor = productsCollection.find(query)
             const result = await cursor.toArray(cursor)
             console.log('from mongodb ')
             res.send(result)
