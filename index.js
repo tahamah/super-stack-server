@@ -34,10 +34,12 @@ async function run() {
         app.get('/fourProducts', async (req, res) => {
             const query = {}
             const cursor = productsCollection.find(query)
-            const result = await cursor.limit(4).toArray(cursor)
+            const result = await cursor.limit(6).toArray(cursor)
             res.send(result)
         })
+
         //delete product
+        //https://agile-journey-07748.herokuapp.com/product/626e44f37574c9e478db68db
         app.delete('/product/:id', async (req, res) => {
             const id = req.params.id
             const filter = { _id: ObjectId(id) }
