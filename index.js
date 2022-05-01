@@ -3,12 +3,12 @@ const app = express()
 const port = process.env.PORT || 5000
 const cors = require('cors')
 require('dotenv').config()
+const { MongoClient, ServerApiVersion } = require('mongodb')
 
 //middleware
 app.use(cors())
 app.use(express.json())
 
-const { MongoClient, ServerApiVersion } = require('mongodb')
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.jvufd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 const client = new MongoClient(uri, {
     useNewUrlParser: true,
@@ -20,15 +20,17 @@ async function run() {
         await client.connect()
         const productsCollection = client.db('data').collection('product')
         //all products
+        //and query api
         //https://agile-journey-07748.herokuapp.com/products
         app.get('/products', async (req, res) => {
-            const query = {}
+            const query = req.query
             const cursor = productsCollection.find(query)
             const result = await cursor.toArray(cursor)
             res.send(result)
         })
 
         //four products
+        //https://agile-journey-07748.herokuapp.com/fourProducts
         app.get('/fourProducts', async (req, res) => {
             const query = {}
             const cursor = productsCollection.find(query)
