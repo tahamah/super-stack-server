@@ -38,6 +38,13 @@ async function run() {
             res.send(result)
         })
 
+        //post
+        app.post('/product', async (req, res) => {
+            const data = req.body
+            const result = await productsCollection.insertOne(data)
+            res.send(result)
+        })
+
         //delete product
         //https://agile-journey-07748.herokuapp.com/product/626e44f37574c9e478db68db
         app.delete('/product/:id', async (req, res) => {
