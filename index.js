@@ -30,11 +30,26 @@ async function run() {
         })
 
         //single product
-        //
+        //https://agile-journey-07748.herokuapp.com/product/${product_id}
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id
             const filter = { _id: ObjectId(id) }
             const result = await productsCollection.findOne(filter)
+            res.send(result)
+        })
+
+        //update product
+        //
+        app.put('/product/:id', async (req, res) => {
+            const id = req.params.id
+            const data = req.body
+            const filter = { _id: ObjectId(id) }
+            const updateDoc = {
+                $set: {
+                    quantity: data.quantity,
+                },
+            }
+            const result = await productsCollection.updateOne(filter, updateDoc)
             res.send(result)
         })
 
