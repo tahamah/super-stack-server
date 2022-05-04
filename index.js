@@ -29,6 +29,15 @@ async function run() {
             res.send(result)
         })
 
+        //single product
+        //
+        app.get('/product/:id', async (req, res) => {
+            const id = req.params.id
+            const filter = { _id: ObjectId(id) }
+            const result = await productsCollection.findOne(filter)
+            res.send(result)
+        })
+
         //four products
         //https://agile-journey-07748.herokuapp.com/fourProducts
         app.get('/fourProducts', async (req, res) => {
@@ -39,6 +48,7 @@ async function run() {
         })
 
         //post
+        //https://agile-journey-07748.herokuapp.com/product
         app.post('/product', async (req, res) => {
             const data = req.body
             const result = await productsCollection.insertOne(data)
