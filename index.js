@@ -23,7 +23,15 @@ async function run() {
         //and query api
         //https://agile-journey-07748.herokuapp.com/products
         app.get('/products', async (req, res) => {
-            const query = req.query
+            const query = {}
+            const cursor = productsCollection.find(query)
+            const result = await cursor.toArray(cursor)
+            res.send(result)
+        })
+        //myProducts
+        app.get('/myProducts', async (req, res) => {
+            const email = req.query.email
+            const query = { email }
             const cursor = productsCollection.find(query)
             const result = await cursor.toArray(cursor)
             res.send(result)
