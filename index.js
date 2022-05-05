@@ -39,7 +39,7 @@ async function run() {
         })
 
         //update product
-        //
+        //https://agile-journey-07748.herokuapp.com/product/626e73247574c9e478f804fd
         app.put('/product/:id', async (req, res) => {
             const id = req.params.id
             const data = req.body
