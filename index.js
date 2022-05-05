@@ -3,11 +3,27 @@ const app = express()
 const port = process.env.PORT || 5000
 const cors = require('cors')
 require('dotenv').config()
+const jwt = require('jsonwebtoken')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
 
 //middleware
 app.use(cors())
 app.use(express.json())
+
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers.authorization
+    if (!authHeader) {
+        return res.status(401).send({ message: 'unauthorized access' })
+    }
+    const token = authHeader.split(' ')[1]
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(403).send({ message: 'Forbidden access' })
+        }
+        req.decoded = decoded
+        next()
+    })
+}
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.jvufd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
 const client = new MongoClient(uri, {
@@ -29,12 +45,30 @@ async function run() {
             res.send(result)
         })
         //myProducts
-        app.get('/myProducts', async (req, res) => {
+        //https://agile-journey-07748.herokuapp.com/myProducts?email=taha.iu.bd@gmail.com
+        app.get('/myProducts', verifyJWT, async (req, res) => {
+            const decodedEmail = req.decoded.email
             const email = req.query.email
-            const query = { email }
-            const cursor = productsCollection.find(query)
-            const result = await cursor.toArray(cursor)
-            res.send(result)
+            if (decodedEmail === email) {
+                const query = { email }
+                const cursor = productsCollection.find(query)
+                const result = await cursor.toArray(cursor)
+                res.send(result)
+            } else {
+                return res.status(403).send({ message: 'Forbidden access' })
+            }
+        })
+        //Auth
+        app.post('/login', async (req, res) => {
+            const user = req.body
+            const accessToken = jwt.sign(
+                user,
+                process.env.ACCESS_TOKEN_SECRET,
+                {
+                    expiresIn: '1d',
+                }
+            )
+            res.send({ accessToken })
         })
 
         //single product
