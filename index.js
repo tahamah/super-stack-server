@@ -59,6 +59,7 @@ async function run() {
             }
         })
         //Auth
+        //https://agile-journey-07748.herokuapp.com/login
         app.post('/login', async (req, res) => {
             const user = req.body
             const accessToken = jwt.sign(
@@ -127,7 +128,7 @@ async function run() {
 run().catch(console.dir)
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Super Stack Server is running!')
 })
 
 app.listen(port, () => {
