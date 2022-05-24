@@ -109,6 +109,7 @@ async function run() {
         //https://agile-journey-07748.herokuapp.com/product
         app.post('/product', async (req, res) => {
             const data = req.body
+            console.log(data)
             const result = await productsCollection.insertOne(data)
             res.send(result)
         })
